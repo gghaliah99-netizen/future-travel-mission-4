@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Future Travel Mission ✈️ – Far and Away</title>
+<meta name="description" content="An interactive English grammar journey across Saudi Arabia – Mega Goal 2, Unit 3: Far and Away." />
+<meta property="og:title" content="Future Travel Mission ✈️ – Far and Away" />
+<meta property="og:description" content="Travel from Jeddah to Riyadh and complete 12 English challenges about the future." />
+<meta name="theme-color" content="#2BB5B0" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --pink: #F28DB2;
+    --pink-d: #D9567F;
+    --pink-l: #FCE1EB;
+    --teal: #2BB5B0;
+    --teal-d: #137F7E;
+    --teal-l: #D4F1EF;
+    --beige: #F8EEDF;
+    --sand: #E9D3B4;
+    --sand-d: #C9A97E;
+    --ink: #3B2F3F;
+    --ok: #2E9E6A;
+    --bad: #E0475E;
+    --u: min(1vw, 1.7778vh); /* 1% of stage width */
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: "Fredoka", system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 15% 20%, rgba(242,141,178,.35), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(43,181,176,.35), transparent 40%),
+      #EBDCC6;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    touch-action: manipulation;
+    user-select: none; -webkit-user-select: none;
+  }
+  button { font-family: inherit; color: inherit; touch-action: manipulation; cursor: pointer; }
+
+  /* ---------- 16:9 stage ---------- */
+  .stage {
+    position: relative;
+    width: calc(var(--u) * 100);
+    height: calc(var(--u) * 56.25);
+    background: var(--beige);
+    background-image:
+      radial-gradient(rgba(201,169,126,.25) 1px, transparent 1.4px);
+    background-size: calc(var(--u) * 2) calc(var(--u) * 2);
+    border-radius: calc(var(--u) * 1.6);
+    box-shadow: 0 calc(var(--u)*1) calc(var(--u)*4) rgba(59,47,63,.25);
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+  @media (max-aspect-ratio: 4/5) {
+    /* phones held upright: keep the game usable full-screen */
+    :root { --u: 2.5vw; }
+    body { overflow: auto; align-items: stretch; }
+    .stage { width: 100vw; height: auto; min-height: 100dvh; border-radius: 0; }
+  }
+
+  /* ---------- Header ---------- */
+  .topbar {
+    display: flex; align-items: center; gap: calc(var(--u)*2);
+    padding: calc(var(--u)*1.2) calc(var(--u)*2.4);
+    background: #fff8;
+    border-bottom: calc(var(--u)*.25) dashed var(--sand-d);
+  }
+  .brand { font-weight: 700; font-size: calc(var(--u)*1.8); white-space: nowrap; color: var(--teal-d); }
+  .brand span { font-family: "Caveat", cursive; color: var(--pink-d); font-size: 1.2em; margin-left: .2em; }
+  .progress { flex: 1; display: flex; gap: calc(var(--u)*.4); align-items: center; }
+  .seg {
+    flex: 1; height: calc(var(--u)*1.2); border-radius: 99px;
+    background: #fff; border: calc(var(--u)*.18) solid var(--sand-d);
+    transition: background .4s;
+  }
+  .seg.gap { margin-right: calc(var(--u)*.8); }
+  .seg.done { background: var(--teal); border-color: var(--teal-d); }
+  .seg.miss { background: var(--pink); border-color: var(--pink-d); }
+  .seg.now { animation: pulse 1.2s infinite; border-color: var(--pink-d); }
+  @keyframes pulse { 50% { background: var(--pink-l); } }
+  .score-pill {
+    background: var(--pink); color: #fff; font-weight: 700;
+    font-size: calc(var(--u)*1.8); padding: calc(var(--u)*.5) calc(var(--u)*1.6);
+    border-radius: 99px; border: calc(var(--u)*.25) solid var(--pink-d);
+    white-space: nowrap;
+  }
+  .score-pill.bump { animation: bump .5s; }
+  @keyframes bump { 40% { transform: scale(1.25) rotate(-4deg); } }
+
+  .footer {
+    text-align: center; padding: calc(var(--u)*.7);
+    font-size: calc(var(--u)*1.5); color: var(--teal-d);
+    border-top: calc(var(--u)*.25) dashed var(--sand-d);
+    background: #fff6;
+  }
+  .footer b { font-family: "Caveat", cursive; font-size: 1.35em; color: var(--pink-d); }
+
+  /* ---------- Screens ---------- */
+  #screen { position: relative; overflow: hidden; }
+  .screen {
+    position: absolute; inset: 0;
+    padding: calc(var(--u)*2) calc(var(--u)*3);
+    animation: enter .45s ease both;
+  }
+  @media (max-aspect-ratio: 4/5) { .screen { position: relative; min-height: 100%; } }
+  @keyframes enter { from { opacity: 0; transform: translateY(calc(var(--u)*2)); } }
+
+  .btn {
+    border: calc(var(--u)*.3) solid var(--ink);
+    background: var(--teal); color: #fff; font-weight: 700;
+    font-size: calc(var(--u)*2.4);
+    padding: calc(var(--u)*1) calc(var(--u)*3.2);
+    border-radius: calc(var(--u)*1.6) calc(var(--u)*1.2) calc(var(--u)*1.8) calc(var(--u)*1.1);
+    box-shadow: calc(var(--u)*.4) calc(var(--u)*.5) 0 var(--ink);
+    transition: transform .12s, box-shadow .12s;
+  }
+  .btn:hover { transform: translate(-1px,-2px); }
+  .btn:active { transform: translate(calc(var(--u)*.4), calc(var(--u)*.5)); box-shadow: 0 0 0 var(--ink); }
+  .btn.pink { background: var(--pink-d); }
+  .btn.ghost { background: #fff; color: var(--ink); }
+  .btn:disabled { opacity: .45; pointer-events: none; }
+
+  .rough { filter: url(#rough); }
+
+  /* Start */
+  .start { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: calc(var(--u)*3); }
+  .start h1 { margin: 0; font-size: calc(var(--u)*5.2); line-height: 1; color: var(--teal-d); }
+  .start h1 .sub { display: block; font-family: "Caveat", cursive; color: var(--pink-d); font-size: .8em; margin-top: calc(var(--u)*.8); }
+  .tagline { font-size: calc(var(--u)*2); margin: calc(var(--u)*1.6) 0; line-height: 1.4; }
+  .chips { display: flex; flex-wrap: wrap; gap: calc(var(--u)*.8); margin-bottom: calc(var(--u)*2.4); }
+  .chip {
+    background: #fff; border: calc(var(--u)*.2) solid var(--sand-d); border-radius: 99px;
+    padding: calc(var(--u)*.4) calc(var(--u)*1.2); font-size: calc(var(--u)*1.5); font-weight: 500;
+  }
+  .ticket {
+    position: relative; background: #fff; border: calc(var(--u)*.3) solid var(--ink);
+    border-radius: calc(var(--u)*2); padding: calc(var(--u)*2); transform: rotate(2deg);
+    box-shadow: calc(var(--u)*.6) calc(var(--u)*.8) 0 var(--pink);
+  }
+  .ticket .t-head { display: flex; justify-content: space-between; font-weight: 700; color: var(--pink-d); font-size: calc(var(--u)*1.6); letter-spacing: .1em; }
+  .ticket .route { display: flex; justify-content: space-between; align-items: center; margin: calc(var(--u)*1.2) 0; }
+  .ticket .code { font-size: calc(var(--u)*4); font-weight: 700; color: var(--teal-d); line-height: 1; }
+  .ticket .code small { display: block; font-size: calc(var(--u)*1.3); color: var(--ink); font-weight: 500; }
+  .ticket .stops { display: grid; grid-template-columns: repeat(4,1fr); gap: calc(var(--u)*.6); margin-top: calc(var(--u)*1); }
+  .ticket .stop { background: var(--teal-l); border-radius: calc(var(--u)*1); padding: calc(var(--u)*.6); text-align: center; font-size: calc(var(--u)*1.4); font-weight: 600; }
+  .ticket .perf { border-top: calc(var(--u)*.3) dashed var(--sand-d); margin: calc(var(--u)*1.2) 0 calc(var(--u)*.8); }
+  .ticket .barcode { height: calc(var(--u)*3); background: repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px 5px, var(--ink) 5px 6px, transparent 6px 9px); border-radius: 4px; }
+
+  /* Map */
+  .map-wrap { display: grid; grid-template-columns: 1fr 1.25fr; gap: calc(var(--u)*3); height: 100%; align-items: center; }
+  .map-wrap h2 { margin: 0 0 calc(var(--u)*1); font-size: calc(var(--u)*3.6); color: var(--teal-d); }
+  .map-wrap p { font-size: calc(var(--u)*1.9); line-height: 1.4; margin: 0 0 calc(var(--u)*1.6); }
+  .legs { display: grid; gap: calc(var(--u)*.8); }
+  .leg {
+    display: flex; align-items: center; gap: calc(var(--u)*1.2); background: #fff;
+    border: calc(var(--u)*.22) solid var(--sand-d); border-radius: calc(var(--u)*1.2);
+    padding: calc(var(--u)*.6) calc(var(--u)*1.2); font-size: calc(var(--u)*1.7);
+  }
+  .leg .n { width: calc(var(--u)*3); height: calc(var(--u)*3); border-radius: 50%; display: grid; place-items: center; background: var(--sand); font-weight: 700; flex: none; }
+  .leg.done .n { background: var(--teal); color: #fff; }
+  .leg.next { border-color: var(--pink-d); box-shadow: 0 0 0 calc(var(--u)*.3) var(--pink-l); }
+  .leg.next .n { background: var(--pink-d); color: #fff; }
+  .leg .meta { margin-left: auto; font-weight: 600; color: var(--teal-d); white-space: nowrap; }
+  .leg small { display: block; font-size: .8em; opacity: .75; }
+  .map { position: relative; width: min(100%, calc(var(--u)*50)); margin: 0 auto; aspect-ratio: 100 / 82; max-height: 100%; }
+  .map svg { width: 100%; height: 100%; display: block; }
+  .pin {
+    position: absolute; transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; align-items: center; gap: calc(var(--u)*.3);
+    background: none; border: 0; padding: 0;
+  }
+  .pin .dot {
+    width: calc(var(--u)*5); height: calc(var(--u)*5); border-radius: 50%;
+    display: grid; place-items: center; font-size: calc(var(--u)*2.4);
+    background: #fff; border: calc(var(--u)*.3) solid var(--ink);
+    box-shadow: calc(var(--u)*.3) calc(var(--u)*.4) 0 var(--ink);
+  }
+  .pin .lbl { background: var(--ink); color: #fff; font-weight: 600; font-size: calc(var(--u)*1.5); padding: calc(var(--u)*.2) calc(var(--u)*.9); border-radius: 99px; }
+  .pin.done .dot { background: var(--teal); color: #fff; }
+  .pin.next .dot { background: var(--pink); animation: hop 1.4s infinite; }
+  .pin.locked { cursor: not-allowed; opacity: .75; }
+  .pin.locked .dot { background: var(--sand); }
+  @keyframes hop { 50% { transform: translateY(calc(var(--u)*-.8)); } }
+
+  /* Station intro */
+  .intro { display: grid; grid-template-columns: 1fr 1.2fr; gap: calc(var(--u)*3); align-items: center; height: 100%; }
+  .postcard {
+    background: #fff; border: calc(var(--u)*.3) solid var(--ink); border-radius: calc(var(--u)*1.6);
+    padding: calc(var(--u)*1.4); transform: rotate(-2.5deg);
+    box-shadow: calc(var(--u)*.6) calc(var(--u)*.8) 0 var(--teal);
+  }
+  .postcard .art { border-radius: calc(var(--u)*1); overflow: hidden; aspect-ratio: 4/3; }
+  .postcard .art svg { width: 100%; height: 100%; display: block; }
+  .postcard .cap { font-family: "Caveat", cursive; font-size: calc(var(--u)*3); text-align: center; margin-top: calc(var(--u)*.6); color: var(--pink-d); }
+  .kicker { font-weight: 700; color: var(--pink-d); letter-spacing: .12em; font-size: calc(var(--u)*1.6); text-transform: uppercase; }
+  .intro h2 { margin: calc(var(--u)*.4) 0 calc(var(--u)*1); font-size: calc(var(--u)*4); line-height: 1.05; color: var(--teal-d); }
+  .intro p { font-size: calc(var(--u)*2); line-height: 1.45; margin: 0 0 calc(var(--u)*1.4); }
+  .rule {
+    background: var(--teal-l); border-left: calc(var(--u)*.7) solid var(--teal);
+    border-radius: calc(var(--u)*1); padding: calc(var(--u)*1.2) calc(var(--u)*1.6);
+    font-size: calc(var(--u)*1.8); line-height: 1.45; margin-bottom: calc(var(--u)*2);
+  }
+  .rule b { color: var(--teal-d); }
+
+  /* Question */
+  .quiz { display: grid; grid-template-columns: calc(var(--u)*22) 1fr; gap: calc(var(--u)*3); height: 100%; }
+  .side { display: flex; flex-direction: column; gap: calc(var(--u)*1.2); }
+  .side .postcard { transform: rotate(-2deg); padding: calc(var(--u)*1); }
+  .side .postcard .cap { font-size: calc(var(--u)*2.4); margin-top: calc(var(--u)*.2); }
+  .qcount { font-weight: 700; font-size: calc(var(--u)*1.7); text-align: center; color: var(--teal-d); }
+  .qdots { display: flex; justify-content: center; gap: calc(var(--u)*.8); }
+  .qdots i { width: calc(var(--u)*1.6); height: calc(var(--u)*1.6); border-radius: 50%; background: #fff; border: calc(var(--u)*.22) solid var(--ink); }
+  .qdots i.on { background: var(--pink); }
+  .qdots i.ok { background: var(--teal); }
+  .main { display: flex; flex-direction: column; justify-content: center; gap: calc(var(--u)*1.6); min-width: 0; }
+  .instr { font-weight: 600; color: var(--pink-d); font-size: calc(var(--u)*1.9); }
+  .context {
+    background: #fff; border: calc(var(--u)*.22) dashed var(--sand-d); border-radius: calc(var(--u)*1.2);
+    padding: calc(var(--u)*1) calc(var(--u)*1.6); font-size: calc(var(--u)*2); line-height: 1.4;
+  }
+  .sentence { font-size: calc(var(--u)*3.1); font-weight: 600; line-height: 1.35; }
+  .blank {
+    display: inline-block; min-width: calc(var(--u)*9); text-align: center;
+    border-bottom: calc(var(--u)*.35) solid var(--pink-d); color: var(--pink-d); padding: 0 calc(var(--u)*.6);
+  }
+  .blank.filled { color: var(--ok); border-color: var(--ok); }
+  .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(calc(var(--u)*18), 1fr)); gap: calc(var(--u)*1.2); }
+  .opt {
+    background: #fff; border: calc(var(--u)*.3) solid var(--ink);
+    border-radius: calc(var(--u)*1.4) calc(var(--u)*1) calc(var(--u)*1.6) calc(var(--u)*1.1);
+    box-shadow: calc(var(--u)*.35) calc(var(--u)*.45) 0 var(--ink);
+    font-size: calc(var(--u)*2.4); font-weight: 600; padding: calc(var(--u)*1.1) calc(var(--u)*1);
+    transition: transform .12s, background .2s, box-shadow .12s;
+  }
+  .opt small { display: block; font-size: .62em; font-weight: 500; opacity: .8; margin-top: calc(var(--u)*.3); }
+  .opt:hover { background: var(--pink-l); }
+  .opt:active { transform: translate(calc(var(--u)*.35), calc(var(--u)*.45)); box-shadow: none; }
+  .opt.wrong { background: #FBD5DB; border-color: var(--bad); color: var(--bad); box-shadow: none; text-decoration: line-through; pointer-events: none; animation: shake .4s; }
+  .opt.right { background: var(--teal); color: #fff; pointer-events: none; animation: pop .4s; }
+  .opts.locked .opt:not(.right) { opacity: .45; pointer-events: none; }
+  @keyframes shake { 20%,60% { transform: translateX(calc(var(--u)*-.8)); } 40%,80% { transform: translateX(calc(var(--u)*.8)); } }
+  @keyframes pop { 50% { transform: scale(1.06); } }
+
+  /* word order */
+  .build {
+    min-height: calc(var(--u)*7); background: #fff; border: calc(var(--u)*.3) dashed var(--teal);
+    border-radius: calc(var(--u)*1.4); padding: calc(var(--u)*1); display: flex; flex-wrap: wrap; gap: calc(var(--u)*.8); align-items: center;
+  }
+  .build.empty::before { content: "Tap the words in the correct order…"; color: #9b8f96; font-size: calc(var(--u)*1.8); padding-left: calc(var(--u)*.6); }
+  .build.wrong { border-color: var(--bad); animation: shake .4s; }
+  .build.right { border-color: var(--ok); border-style: solid; background: #E3F6EE; }
+  .bank { display: flex; flex-wrap: wrap; gap: calc(var(--u)*1); justify-content: center; min-height: calc(var(--u)*5.5); }
+  .word {
+    background: var(--pink-l); border: calc(var(--u)*.25) solid var(--ink); border-radius: calc(var(--u)*1);
+    font-size: calc(var(--u)*2.4); font-weight: 600; padding: calc(var(--u)*.6) calc(var(--u)*1.4);
+    box-shadow: calc(var(--u)*.25) calc(var(--u)*.35) 0 var(--ink);
+  }
+  .build .word { background: var(--teal-l); }
+  .row { display: flex; gap: calc(var(--u)*1.2); align-items: center; flex-wrap: wrap; }
+
+  .feedback {
+    min-height: calc(var(--u)*6); display: flex; align-items: center; gap: calc(var(--u)*1.6);
+    border-radius: calc(var(--u)*1.4); padding: calc(var(--u)*1) calc(var(--u)*1.6);
+    font-size: calc(var(--u)*1.9); line-height: 1.35; visibility: hidden;
+  }
+  .feedback.show { visibility: visible; animation: enter .3s both; }
+  .feedback.good { background: #E3F6EE; border: calc(var(--u)*.25) solid var(--ok); }
+  .feedback.bad { background: #FDE6EA; border: calc(var(--u)*.25) solid var(--bad); }
+  .feedback .em { font-size: calc(var(--u)*3.4); }
+  .feedback .txt { flex: 1; }
+  .feedback b { display: block; font-size: 1.15em; }
+  .feedback .btn { font-size: calc(var(--u)*2); padding: calc(var(--u)*.8) calc(var(--u)*2.2); }
+
+  /* Station complete / final */
+  .center { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 100%; gap: calc(var(--u)*1.4); }
+  .center h2 { margin: 0; font-size: calc(var(--u)*4.4); color: var(--teal-d); }
+  .center p { margin: 0; font-size: calc(var(--u)*2.1); max-width: calc(var(--u)*70); line-height: 1.45; }
+  .stamp {
+    width: calc(var(--u)*16); height: calc(var(--u)*16); border-radius: 50%;
+    border: calc(var(--u)*.6) double var(--pink-d); color: var(--pink-d);
+    display: grid; place-items: center; text-align: center; font-weight: 700;
+    font-size: calc(var(--u)*1.7); line-height: 1.2; transform: rotate(-12deg);
+    animation: stampIn .6s cubic-bezier(.2,1.6,.4,1) both; background: #fff8;
+  }
+  .stamp big { display: block; font-size: calc(var(--u)*3.4); font-family: "Caveat", cursive; }
+  @keyframes stampIn { from { transform: scale(2.4) rotate(-30deg); opacity: 0; } }
+  .bigscore { font-size: calc(var(--u)*9); font-weight: 700; color: var(--pink-d); line-height: 1; }
+  .bigscore small { font-size: .4em; color: var(--ink); }
+  .stars { font-size: calc(var(--u)*4.4); letter-spacing: calc(var(--u)*.6); }
+  .passport { display: flex; gap: calc(var(--u)*1.6); flex-wrap: wrap; justify-content: center; }
+  .pstamp {
+    border: calc(var(--u)*.3) dashed var(--teal-d); border-radius: calc(var(--u)*1.2); padding: calc(var(--u)*.6) calc(var(--u)*1.4);
+    background: #fff; font-weight: 600; font-size: calc(var(--u)*1.6); transform: rotate(var(--r));
+  }
+  .pstamp b { color: var(--pink-d); display: block; font-size: 1.3em; }
+
+  .confetti { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .confetti i { position: absolute; top: -5%; width: calc(var(--u)*1); height: calc(var(--u)*1.6); border-radius: 2px; animation: fall linear forwards; }
+  @keyframes fall { to { transform: translateY(70vh) rotate(720deg); opacity: .2; } }
+
+  .sound-btn {
+    background: #fff; border: calc(var(--u)*.22) solid var(--sand-d); border-radius: 50%;
+    width: calc(var(--u)*4); height: calc(var(--u)*4); font-size: calc(var(--u)*1.9); flex: none;
+  }
+
+  @media (max-aspect-ratio: 4/5) {
+    .start, .map-wrap, .intro, .quiz { grid-template-columns: 1fr; height: auto; }
+    .start { padding-top: calc(var(--u)*2); }
+    .quiz .side { flex-direction: row; align-items: center; }
+    .quiz .side .postcard { width: 40%; }
+    .quiz .side .side-info { flex: 1; }
+    .brand { display: none; }
+    .ticket { transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter>
+</svg>
+
+<div class="stage" id="stage">
+  <header class="topbar">
+    <div class="brand">Future Travel Mission <span>Far and Away</span></div>
+    <div class="progress" id="progress" aria-label="Mission progress"></div>
+    <div class="score-pill" id="score" aria-live="polite">⭐ 0 / 12</div>
+    <button class="sound-btn" id="soundBtn" aria-label="Toggle sound">🔊</button>
+  </header>
+  <main id="screen"></main>
+  <footer class="footer">Mega Goal 2 · Unit 3 &nbsp;·&nbsp; Teacher: <b>Ghaliah Al-Shamrani</b></footer>
+</div>
+
+<script>
+/* =========================================================
+   Hand-drawn station art (simple SVG, roughened by #rough)
+   ========================================================= */
+const ART = {
+  jeddah: `<svg viewBox="0 0 160 120" aria-hidden="true">
+    <rect width="160" height="120" fill="#FCE1EB"/>
+    <circle cx="128" cy="26" r="13" fill="#F9C66B" stroke="#3B2F3F" stroke-width="2.5" class="rough"/>
+    <g class="rough" stroke="#3B2F3F" stroke-width="2.5" fill="none" stroke-linecap="round">
+      <path d="M80 82 C 76 50, 78 30, 80 12 C 82 30, 84 50, 80 82" fill="#fff"/>
+      <path d="M80 18 C 70 26, 64 40, 62 56 M80 18 C 90 26, 96 40, 98 56" stroke="#2BB5B0"/>
+    </g>
+    <path d="M0 84 Q 20 76 40 84 T 80 84 T 120 84 T 160 84 V120 H0Z" fill="#2BB5B0" stroke="#3B2F3F" stroke-width="2.5" class="rough"/>
+    <path d="M10 100 q 10 -6 20 0 M60 104 q 10 -6 20 0 M110 98 q 10 -6 20 0" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <g class="rough" stroke="#3B2F3F" stroke-width="2.5" stroke-linecap="round" fill="none">
+      <path d="M22 84 Q 26 60 30 48"/><path d="M30 48 q -14 -2 -18 6 M30 48 q 12 -6 20 0 M30 48 q -6 -10 -14 -8 M30 48 q 6 -12 14 -10" stroke="#137F7E"/>
+    </g>
+  </svg>`,
+  alula: `<svg viewBox="0 0 160 120" aria-hidden="true">
+    <rect width="160" height="120" fill="#F8EEDF"/>
+    <circle cx="30" cy="28" r="12" fill="#F28DB2" stroke="#3B2F3F" stroke-width="2.5" class="rough"/>
+    <path class="rough" d="M30 96 C 30 70, 40 44, 64 40 C 84 36, 108 40, 122 58 C 132 72, 132 86, 130 96 L 112 96 C 112 82, 108 74, 102 72 C 98 82, 96 90, 96 96 L 84 96 C 84 86, 80 76, 70 74 C 60 74, 56 86, 56 96 Z" fill="#E7A27A" stroke="#3B2F3F" stroke-width="2.5" stroke-linejoin="round"/>
+    <path class="rough" d="M70 50 q 10 -4 20 2 M100 52 q 8 2 12 8" stroke="#3B2F3F" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path class="rough" d="M0 96 Q 40 88 80 96 T 160 94 V120 H0Z" fill="#E9D3B4" stroke="#3B2F3F" stroke-width="2.5"/>
+    <g fill="#3B2F3F"><circle cx="40" cy="108" r="1.5"/><circle cx="100" cy="110" r="1.5"/><circle cx="130" cy="106" r="1.5"/></g>
+  </svg>`,
+  abha: `<svg viewBox="0 0 160 120" aria-hidden="true">
+    <rect width="160" height="120" fill="#D4F1EF"/>
+    <g class="rough" stroke="#3B2F3F" stroke-width="2" fill="#fff"><path d="M18 30 q 6 -10 16 -4 q 8 -8 16 2 q 8 0 6 8 H18Z"/><path d="M110 22 q 6 -8 14 -2 q 8 -4 12 4 q 6 2 2 8 H110Z"/></g>
+    <path class="rough" d="M0 110 L 40 50 L 70 84 L 104 36 L 160 104 V120 H0Z" fill="#7CC7A0" stroke="#3B2F3F" stroke-width="2.5" stroke-linejoin="round"/>
+    <path class="rough" d="M0 120 L 30 86 L 60 104 L 96 76 L 130 98 L 160 84 V120Z" fill="#4FA77F" stroke="#3B2F3F" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M10 18 L 150 70" stroke="#3B2F3F" stroke-width="2" class="rough"/>
+    <g class="rough" stroke="#3B2F3F" stroke-width="2.5"><path d="M80 47 v 8"/><rect x="70" y="55" width="20" height="16" rx="4" fill="#F28DB2"/><rect x="74" y="59" width="12" height="6" rx="1" fill="#fff"/></g>
+  </svg>`,
+  riyadh: `<svg viewBox="0 0 160 120" aria-hidden="true">
+    <rect width="160" height="120" fill="#FCE1EB"/>
+    <g fill="#F9C66B" stroke="#3B2F3F" stroke-width="1.5"><path d="M20 20 l2 5 5 0 -4 3 2 5 -5 -3 -5 3 2 -5 -4 -3 5 0z"/><path d="M138 30 l1.5 4 4 0 -3 2.5 1.5 4 -4 -2.5 -4 2.5 1.5 -4 -3 -2.5 4 0z"/></g>
+    <path class="rough" d="M62 104 C 64 70, 68 40, 72 14 L 88 14 C 92 40, 96 70, 98 104 Z" fill="#fff" stroke="#3B2F3F" stroke-width="2.5" stroke-linejoin="round"/>
+    <path class="rough" d="M74 18 C 76 30, 84 30, 86 18 C 84 26, 76 26, 74 18 Z M74 18 Q 80 34 86 18" fill="#FCE1EB" stroke="#3B2F3F" stroke-width="2"/>
+    <path class="rough" d="M70 32 h 20" stroke="#3B2F3F" stroke-width="2.5"/>
+    <g class="rough" stroke="#3B2F3F" stroke-width="2.5"><rect x="20" y="72" width="28" height="32" fill="#2BB5B0"/><rect x="112" y="64" width="26" height="40" fill="#2BB5B0"/><rect x="40" y="84" width="16" height="20" fill="#E9D3B4"/><rect x="102" y="80" width="14" height="24" fill="#E9D3B4"/></g>
+    <g fill="#fff"><rect x="26" y="78" width="5" height="5"/><rect x="36" y="78" width="5" height="5"/><rect x="26" y="90" width="5" height="5"/><rect x="118" y="72" width="5" height="5"/><rect x="128" y="72" width="5" height="5"/><rect x="118" y="86" width="5" height="5"/></g>
+    <path class="rough" d="M0 104 H160 V120 H0Z" fill="#E9D3B4" stroke="#3B2F3F" stroke-width="2.5"/>
+  </svg>`
+};
+
+/* =========================================================
+   Mission content – 4 stations × 3 questions
+   Answers are only checked in JS; nothing is highlighted
+   until the student makes a choice.
+   ========================================================= */
+const STATIONS = [
+  {
+    key: "jeddah", city: "Jeddah", code: "JED", emoji: "🌊",
+    title: "Future Plans",
+    blurb: "Welcome to the Bride of the Red Sea! Before you explore the Corniche and Al-Balad, talk about your travel plans.",
+    rule: "<b>be going to + base verb</b> → plans and intentions.<br>I <b>am going to</b> visit… · She <b>is going to</b> stay… · <b>Are</b> you <b>going to</b> try…?",
+    questions: [
+      { type: "mcq", instr: "Choose the correct answer.",
+        sentence: "Look at my suitcase! I ___ visit Jeddah next weekend.",
+        options: ["am going to", "is going to", "are going to"], answer: "am going to",
+        hint: "Match the verb <b>be</b> with the subject <b>I</b>.",
+        explain: "<b>I + am going to + verb</b> describes a future plan." },
+      { type: "mcq", instr: "Complete the travel plan.",
+        sentence: "Sara and her family ___ at a hotel near the Corniche.",
+        options: ["are going to stay", "is going to stay", "are going to staying"], answer: "are going to stay",
+        hint: "The subject is plural, and after <b>going to</b> we use the base verb.",
+        explain: "<b>They are going to stay</b> – plural subject + base verb." },
+      { type: "mcq", instr: "Complete the question.",
+        sentence: "___ you going to try the seafood in Al-Balad?",
+        options: ["Are", "Do", "Will"], answer: "Are",
+        hint: "Questions with <b>going to</b> start with the verb <b>be</b>.",
+        explain: "<b>Are you going to…?</b> – we move <b>be</b> before the subject." }
+    ]
+  },
+  {
+    key: "alula", city: "AlUla", code: "ULH", emoji: "🪨",
+    title: "Present Progressive",
+    blurb: "You've reached the ancient rocks of AlUla! The present progressive can describe what is happening <i>now</i> – or a fixed plan in the future.",
+    rule: "<b>am / is / are + verb-ing</b><br>Now: Look! They <b>are climbing</b> the rock.<br>Future arrangement: We <b>are flying</b> home <b>on Friday</b>.",
+    questions: [
+      { type: "mcq", instr: "Is this happening now or a future arrangement?",
+        sentence: "Look! The tourists are taking photos of Elephant Rock.",
+        options: [{ v: "now", label: "🔴 Happening now" }, { v: "future", label: "📅 Future arrangement" }], answer: "now", fixed: true,
+        hint: "<b>Look!</b> tells us what we can see at this moment.",
+        explain: "<b>Look!</b> shows the action is in progress <b>right now</b>." },
+      { type: "mcq", instr: "Is this happening now or a future arrangement?",
+        sentence: "We are flying to AlUla on Thursday. Our tickets are booked.",
+        options: [{ v: "now", label: "🔴 Happening now" }, { v: "future", label: "📅 Future arrangement" }], answer: "future", fixed: true,
+        hint: "Look at the time expression and the booked tickets.",
+        explain: "<b>On Thursday</b> + booked tickets = a <b>fixed future arrangement</b>." },
+      { type: "order", instr: "Put the words in the correct order to make a question.",
+        words: ["visiting", "Are", "next Saturday", "Hegra", "you"],
+        answer: ["Are", "you", "visiting", "Hegra", "next Saturday"], end: "?",
+        hint: "Start with the verb <b>be</b>, then the subject, then <b>verb-ing</b>.",
+        explain: "<b>Are you visiting Hegra next Saturday?</b> – a question about a future arrangement." }
+    ]
+  },
+  {
+    key: "abha", city: "Abha", code: "AHB", emoji: "⛰️",
+    title: "Will vs. Going To",
+    blurb: "Fresh air in the green mountains of Abha! Read each short situation and decide: <b>will</b> or <b>going to</b>?",
+    rule: "<b>will</b> → a decision made <b>at the moment of speaking</b> ⚡<br><b>going to</b> → a plan made <b>before</b>, or a prediction based on <b>evidence</b> you can see 📅👀",
+    questions: [
+      { type: "mcq", instr: "Will or going to?",
+        context: "👧 Leen: “Brrr! It's really cold up here on the mountain.”",
+        sentence: "👩 Huda: “Wait here – I ___ get your jacket from the car.”",
+        options: [{ v: "will", label: "will", sub: "⚡ Instant decision" }, { v: "going", label: "am going to", sub: "📅 Plan / evidence" }], answer: "will", fixed: true,
+        hint: "Did Huda decide this <b>before</b>, or <b>right now</b> when she heard Leen?",
+        explain: "Huda decides <b>at the moment of speaking</b>, so we use <b>will</b>." },
+      { type: "mcq", instr: "Will or going to?",
+        context: "☁️ Dark, heavy clouds are covering Al-Soudah mountain.",
+        sentence: "Look at those clouds! It ___ rain.",
+        options: [{ v: "will", label: "will", sub: "⚡ Instant decision" }, { v: "going", label: "is going to", sub: "📅 Plan / evidence" }], answer: "going", fixed: true,
+        hint: "Can you <b>see evidence</b> for this prediction?",
+        explain: "We can <b>see</b> the clouds – a prediction with evidence uses <b>going to</b>." },
+      { type: "mcq", instr: "Will or going to?",
+        context: "🎟️ Noura bought cable car tickets last week.",
+        sentence: "Noura ___ ride the cable car in Abha tomorrow.",
+        options: [{ v: "will", label: "will", sub: "⚡ Instant decision" }, { v: "going", label: "is going to", sub: "📅 Plan / evidence" }], answer: "going", fixed: true,
+        hint: "Was this decided <b>before</b> now?",
+        explain: "She planned it last week – a <b>plan made before</b> uses <b>going to</b>." }
+    ]
+  },
+  {
+    key: "riyadh", city: "Riyadh", code: "RUH", emoji: "🏙️",
+    title: "Time Expressions",
+    blurb: "Final stop – the capital! Show that you can talk about <i>when</i> things are going to happen.",
+    rule: "<b>later</b> · <b>soon</b> · <b>tomorrow</b> · <b>next week</b> · <b>in two weeks</b> · <b>next month</b> · <b>next year</b>",
+    questions: [
+      { type: "mcq", instr: "Choose the correct time expression.",
+        context: "📅 Today is Monday. The Riyadh Season concert is on Tuesday.",
+        sentence: "We're going to the concert ___.",
+        options: ["tomorrow", "next week", "next month", "next year"], answer: "tomorrow",
+        hint: "What do we call the day <b>right after</b> today?",
+        explain: "Tuesday is the day after Monday – <b>tomorrow</b>." },
+      { type: "mcq", instr: "Choose the correct time expression.",
+        context: "📅 Today is the 1st of May. Your flight to Riyadh is on the 15th of May.",
+        sentence: "My flight to Riyadh leaves ___.",
+        options: ["in two weeks", "tomorrow", "next month", "next year"], answer: "in two weeks",
+        hint: "Count the days: 14 days = how many weeks?",
+        explain: "14 days from now is <b>in two weeks</b>." },
+      { type: "mcq", instr: "Choose the correct time expression.",
+        context: "🕙 It's 10 a.m. now. The National Museum opens at 4 p.m. today.",
+        sentence: "We're going to visit the National Museum ___.",
+        options: ["later", "next week", "next year", "in two weeks"], answer: "later",
+        hint: "The visit is still <b>today</b> – just not now.",
+        explain: "Something at a later time <b>today</b> → <b>later</b>." }
+    ]
+  }
+];
+const TOTAL = STATIONS.reduce((n, s) => n + s.questions.length, 0);
+
+/* =========================================================
+   Sound (tiny Web Audio tones, no files)
+   ========================================================= */
+let soundOn = true, actx = null;
+function tone(freqs, dur = 0.12, type = "triangle") {
+  if (!soundOn) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    freqs.forEach((f, i) => {
+      const o = actx.createOscillator(), g = actx.createGain(), t = actx.currentTime + i * dur;
+      o.type = type; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.18, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g).connect(actx.destination); o.start(t); o.stop(t + dur + 0.02);
+    });
+  } catch (e) {}
+}
+const sfx = {
+  tap: () => tone([520], 0.06),
+  good: () => tone([523, 659, 784], 0.11),
+  bad: () => tone([220, 180], 0.14, "sawtooth"),
+  win: () => tone([523, 659, 784, 1047, 784, 1047], 0.13)
+};
+document.getElementById("soundBtn").onclick = (e) => {
+  soundOn = !soundOn; e.currentTarget.textContent = soundOn ? "🔊" : "🔇";
+};
+
+/* =========================================================
+   Game state
+   ========================================================= */
+let S;
+function reset() {
+  S = {
+    station: 0, q: 0, score: 0,
+    unlocked: 0,                                   // highest station index the student may enter
+    results: STATIONS.map(s => s.questions.map(() => null)), // true = first try, false = needed retry
+    tries: 0, solved: false, built: []
+  };
+}
+reset();
+
+const $screen = document.getElementById("screen");
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const optVal = o => typeof o === "string" ? o : o.v;
+const optLabel = o => typeof o === "string" ? o : o.label;
+
+function render(html) {
+  $screen.innerHTML = `<section class="screen">${html}</section>`;
+  updateHud();
+}
+
+function updateHud(bump) {
+  const p = document.getElementById("progress");
+  let html = "", idx = 0;
+  STATIONS.forEach((st, si) => st.questions.forEach((_, qi) => {
+    const r = S.results[si][qi];
+    let c = r === true ? "done" : r === false ? "miss" : "";
+    if (r === null && si === S.station && qi === S.q && $screen.querySelector(".quiz")) c = "now";
+    if (qi === st.questions.length - 1 && si < STATIONS.length - 1) c += " gap";
+    html += `<div class="seg ${c}" title="${st.city} · Q${qi + 1}"></div>`; idx++;
+  }));
+  p.innerHTML = html;
+  const sc = document.getElementById("score");
+  sc.textContent = `⭐ ${S.score} / ${TOTAL}`;
+  if (bump) { sc.classList.remove("bump"); void sc.offsetWidth; sc.classList.add("bump"); }
+}
+
+/* ---------- Start ---------- */
+function showStart() {
+  reset();
+  render(`
+    <div class="start">
+      <div>
+        <h1>Future Travel Mission ✈️<span class="sub">Far and Away</span></h1>
+        <p class="tagline">Fly across Saudi Arabia, visit <b>4 amazing stations</b> and complete an English challenge at each one. Answer all <b>12 questions</b> to finish your mission!</p>
+        <div class="chips">
+          <span class="chip">🌊 be going to</span><span class="chip">🪨 present progressive</span>
+          <span class="chip">⛰️ will vs. going to</span><span class="chip">🏙️ time expressions</span>
+        </div>
+        <button class="btn pink" id="go">Start Mission 🚀</button>
+      </div>
+      <div class="ticket" aria-hidden="true">
+        <div class="t-head"><span>BOARDING PASS</span><span>MEGA GOAL 2 · UNIT 3</span></div>
+        <div class="route">
+          <div class="code">JED<small>Jeddah</small></div>
+          <div style="font-size:calc(var(--u)*4)">✈️</div>
+          <div class="code" style="text-align:right">RUH<small>Riyadh</small></div>
+        </div>
+        <div class="stops">${STATIONS.map((s, i) => `<div class="stop">${s.emoji}<br>${i + 1}. ${s.city}</div>`).join("")}</div>
+        <div class="perf"></div>
+        <div class="row" style="justify-content:space-between;font-size:calc(var(--u)*1.5)">
+          <span>PASSENGER<br><b style="font-size:1.3em">You! 🧳</b></span>
+          <span style="text-align:right">GATE<br><b style="font-size:1.3em">FUTURE</b></span>
+        </div>
+        <div class="perf"></div>
+        <div class="barcode"></div>
+      </div>
+    </div>`);
+  $screen.querySelector("#go").onclick = () => { sfx.good(); showMap(); };
+}
+
+/* ---------- Map ---------- */
+const PINS = { jeddah: [25, 55], alula: [17, 27], abha: [37, 79], riyadh: [57, 44] };
+function showMap() {
+  const done = i => S.results[i].every(r => r !== null);
+  const pts = STATIONS.map(s => PINS[s.key]);
+  const route = "M" + pts.map(p => `${p[0]} ${p[1] * 0.82}`).join(" L ");
+  const allDone = STATIONS.every((_, i) => done(i));
+  render(`
+    <div class="map-wrap">
+      <div>
+        <h2>${S.unlocked === 0 && !done(0) ? "Your route ✈️" : allDone ? "Mission complete! 🎉" : "Next stop! ✈️"}</h2>
+        <p>${allDone ? "You visited every station. Let's see your final score!" : `Tap <b>${STATIONS[S.unlocked].city}</b> on the map to land and start the challenge. Stations unlock one by one.`}</p>
+        <div class="legs">
+          ${STATIONS.map((s, i) => {
+            const st = done(i) ? "done" : i === S.unlocked ? "next" : "";
+            const pts = S.results[i].filter(r => r === true).length;
+            return `<div class="leg ${st}"><span class="n">${done(i) ? "✓" : i + 1}</span>
+              <span>${s.emoji} <b>${s.city}</b><small>${s.title}</small></span>
+              <span class="meta">${done(i) ? `⭐ ${pts}/3` : i === S.unlocked ? "Open" : "🔒"}</span></div>`;
+          }).join("")}
+        </div>
+        ${allDone ? `<div style="margin-top:calc(var(--u)*2)"><button class="btn pink" id="final">See My Score 🏆</button></div>` : ""}
+      </div>
+      <div class="map">
+        <svg viewBox="0 0 100 82" aria-hidden="true">
+          <path class="rough" d="M13 8 L30 5 L46 12 L56 14 L68 20 L72 28 L77 35 L80 39 L83 45 L95 49 L98 58 L88 70 L70 75 L56 73 L46 78 L38 76 L33 68 L27 57 L21 45 L15 33 L10 20 Z"
+            fill="#F6DDB9" stroke="#3B2F3F" stroke-width="0.8" stroke-linejoin="round"/>
+          <path d="M2 20 Q 6 50 26 80" stroke="#2BB5B0" stroke-width="3" fill="none" opacity=".35" stroke-linecap="round"/>
+          <text x="5" y="62" font-size="3" fill="#137F7E" font-family="Caveat" transform="rotate(62 5 62)">Red Sea</text>
+          <text x="80" y="27" font-size="3" fill="#137F7E" font-family="Caveat">Arabian Gulf</text>
+          <path d="${route}" stroke="#D9567F" stroke-width="0.9" stroke-dasharray="2 1.6" fill="none" stroke-linecap="round"/>
+          <g transform="translate(76 10)" font-size="6"><text>☀️</text></g>
+          <g transform="translate(62 66)" font-size="5"><text>🐪</text></g>
+          <g transform="translate(40 30)" font-size="4.5"><text>🌴</text></g>
+        </svg>
+        ${STATIONS.map((s, i) => {
+          const st = done(i) ? "done" : i === S.unlocked ? "next" : "locked";
+          const [x, y] = PINS[s.key];
+          return `<button class="pin ${st}" data-i="${i}" style="left:${x}%;top:${y}%" aria-label="${s.city}${st === "locked" ? " (locked)" : ""}">
+            <span class="dot">${st === "done" ? "✅" : st === "locked" ? "🔒" : s.emoji}</span><span class="lbl">${s.city}</span></button>`;
+        }).join("")}
+      </div>
+    </div>`);
+  $screen.querySelectorAll(".pin").forEach(b => b.onclick = () => {
+    const i = +b.dataset.i;
+    if (b.classList.contains("locked")) { sfx.bad(); b.animate([{ transform: "translate(-50%,-50%) translateX(-6px)" }, { transform: "translate(-50%,-50%) translateX(6px)" }, { transform: "translate(-50%,-50%)" }], { duration: 300 }); return; }
+    if (b.classList.contains("done")) { sfx.tap(); return; }
+    sfx.tap(); S.station = i; S.q = 0; showIntro();
+  });
+  const f = $screen.querySelector("#final"); if (f) f.onclick = showFinal;
+}
+
+/* ---------- Station intro ---------- */
+function showIntro() {
+  const s = STATIONS[S.station];
+  render(`
+    <div class="intro">
+      <div class="postcard"><div class="art">${ART[s.key]}</div><div class="cap">Greetings from ${s.city}!</div></div>
+      <div>
+        <div class="kicker">Station ${S.station + 1} of 4 · ${s.code}</div>
+        <h2>${s.emoji} ${s.city}<br><span style="color:var(--pink-d)">${s.title}</span></h2>
+        <p>${s.blurb}</p>
+        <div class="rule">${s.rule}</div>
+        <button class="btn" id="go">Begin Challenge ➜</button>
+      </div>
+    </div>`);
+  $screen.querySelector("#go").onclick = () => { sfx.tap(); showQuestion(); };
+}
+
+/* ---------- Question ---------- */
+function showQuestion() {
+  const s = STATIONS[S.station], q = s.questions[S.q];
+  S.tries = 0; S.solved = false; S.built = [];
+  const dots = s.questions.map((_, i) => `<i class="${S.results[S.station][i] !== null ? "ok" : i === S.q ? "on" : ""}"></i>`).join("");
+  let body = "";
+  if (q.type === "mcq") {
+    const opts = q.fixed ? q.options : shuffle(q.options);
+    body = `
+      ${q.context ? `<div class="context">${q.context}</div>` : ""}
+      <div class="sentence">${q.sentence.replace("___", `<span class="blank" id="blank">?</span>`)}</div>
+      <div class="opts" id="opts">${opts.map(o => `<button class="opt" data-v="${optVal(o)}" data-l="${optLabel(o)}">${optLabel(o)}${o.sub ? `<small>${o.sub}</small>` : ""}</button>`).join("")}</div>`;
+  } else {
+    S.bank = shuffle(q.words.map((w, i) => ({ w, id: i })));
+    // avoid starting in the correct order
+    while (S.bank.map(b => b.w).join() === q.answer.join()) S.bank = shuffle(S.bank);
+    body = `
+      <div class="build empty" id="build" aria-label="Your sentence"></div>
+      <div class="bank" id="bank"></div>
+      <div class="row"><button class="btn" id="check" disabled>Check ✓</button><button class="btn ghost" id="clear">↺ Reset</button></div>`;
+  }
+  render(`
+    <div class="quiz">
+      <aside class="side">
+        <div class="postcard"><div class="art">${ART[s.key]}</div><div class="cap">${s.city}</div></div>
+        <div class="side-info">
+          <div class="qcount">${s.title}<br>Question ${S.q + 1} of ${s.questions.length}</div>
+          <div class="qdots" style="margin-top:calc(var(--u)*.8)">${dots}</div>
+        </div>
+      </aside>
+      <div class="main">
+        <div class="instr">${q.instr}</div>
+        ${body}
+        <div class="feedback" id="fb" aria-live="polite"></div>
+      </div>
+    </div>`);
+
+  if (q.type === "mcq") {
+    $screen.querySelectorAll(".opt").forEach(b => b.onclick = () => answerMcq(b, q));
+  } else {
+    drawOrder(q);
+    $screen.querySelector("#check").onclick = () => checkOrder(q);
+    $screen.querySelector("#clear").onclick = () => { sfx.tap(); S.built = []; drawOrder(q); };
+  }
+}
+
+function answerMcq(btn, q) {
+  if (S.solved) return;
+  S.tries++;
+  if (btn.dataset.v === q.answer) {
+    btn.classList.add("right");
+    $screen.querySelector("#opts").classList.add("locked");
+    const blank = $screen.querySelector("#blank");
+    if (blank) { blank.textContent = btn.dataset.l; blank.classList.add("filled"); }
+    solved(q);
+  } else {
+    btn.classList.add("wrong");
+    wrong(q);
+  }
+}
+
+function drawOrder(q) {
+  const build = $screen.querySelector("#build"), bank = $screen.querySelector("#bank");
+  build.classList.remove("wrong");
+  build.classList.toggle("empty", S.built.length === 0);
+  build.innerHTML = S.built.map(b => `<button class="word" data-id="${b.id}">${b.w}</button>`).join("") +
+    (S.built.length === q.words.length ? `<span class="sentence" style="font-size:calc(var(--u)*2.6)">${q.end}</span>` : "");
+  bank.innerHTML = S.bank.filter(b => !S.built.includes(b)).map(b => `<button class="word" data-id="${b.id}">${b.w}</button>`).join("");
+  $screen.querySelector("#check").disabled = S.built.length !== q.words.length || S.solved;
+  if (S.solved) return;
+  bank.querySelectorAll(".word").forEach(el => el.onclick = () => {
+    sfx.tap(); S.built.push(S.bank.find(b => b.id === +el.dataset.id)); drawOrder(q); hideFb();
+  });
+  build.querySelectorAll(".word").forEach(el => el.onclick = () => {
+    sfx.tap(); S.built = S.built.filter(b => b.id !== +el.dataset.id); drawOrder(q); hideFb();
+  });
+}
+
+function checkOrder(q) {
+  if (S.solved) return;
+  S.tries++;
+  const build = $screen.querySelector("#build");
+  if (S.built.map(b => b.w).join(" ") === q.answer.join(" ")) {
+    solved(q);
+    drawOrder(q);
+    build.classList.add("right");
+    $screen.querySelector("#clear").disabled = true;
+  } else {
+    build.classList.remove("wrong"); void build.offsetWidth; build.classList.add("wrong");
+    wrong(q);
+  }
+}
+
+function hideFb() { const fb = $screen.querySelector("#fb"); if (fb && !S.solved) fb.className = "feedback"; }
+
+function wrong(q) {
+  sfx.bad();
+  const fb = $screen.querySelector("#fb");
+  fb.className = "feedback bad"; void fb.offsetWidth; fb.classList.add("show");
+  fb.innerHTML = `<span class="em">🤔</span><span class="txt"><b>Not quite – try again!</b>💡 ${q.hint}</span>`;
+}
+
+function solved(q) {
+  S.solved = true;
+  const first = S.tries === 1;
+  S.results[S.station][S.q] = first;
+  if (first) S.score++;
+  sfx.good();
+  updateHud(first);
+  const s = STATIONS[S.station];
+  const last = S.q === s.questions.length - 1;
+  const fb = $screen.querySelector("#fb");
+  const praise = first ? ["Excellent!", "Brilliant!", "Perfect!", "Well done!"][Math.random() * 4 | 0] + " +1 ⭐" : "Correct! Great job not giving up.";
+  fb.className = "feedback good show";
+  fb.innerHTML = `<span class="em">${first ? "🎉" : "👏"}</span><span class="txt"><b>${praise}</b>${q.explain}</span>
+    <button class="btn" id="next">${last ? "Finish Station 🏁" : "Next ➜"}</button>`;
+  fb.querySelector("#next").onclick = () => {
+    sfx.tap();
+    if (last) showStationDone(); else { S.q++; showQuestion(); }
+  };
+}
+
+/* ---------- Station complete ---------- */
+function showStationDone() {
+  const i = S.station, s = STATIONS[i];
+  const pts = S.results[i].filter(Boolean).length;
+  if (S.unlocked === i && i < STATIONS.length - 1) S.unlocked = i + 1;
+  const lastStation = i === STATIONS.length - 1;
+  sfx.win();
+  render(`
+    <div class="center">
+      <div class="stamp">${s.code}<big>${s.city}</big>VISITED ✓</div>
+      <h2>${s.city} challenge complete!</h2>
+      <p>You earned <b>${pts} out of 3</b> stars at this station. ${pts === 3 ? "Flawless flying! ✨" : "Every mistake helps you learn – keep going! 💪"}</p>
+      <button class="btn pink" id="go">${lastStation ? "See My Final Score 🏆" : `Fly to ${STATIONS[i + 1].city} ✈️`}</button>
+    </div>`);
+  $screen.querySelector("#go").onclick = () => { sfx.tap(); lastStation ? showFinal() : showMap(); };
+}
+
+/* ---------- Final ---------- */
+function showFinal() {
+  const sc = S.score;
+  const stars = sc >= 11 ? 3 : sc >= 8 ? 2 : 1;
+  const msg = sc === 12 ? ["Perfect mission! 🏆", "Amazing! You are a true future-tense expert. Your English is ready for any journey!"]
+    : sc >= 10 ? ["Outstanding traveller! 🌟", "Fantastic work! You really understand how to talk about the future."]
+    : sc >= 7 ? ["Great journey! ✈️", "Well done! You're on the right track – review the tricky stations and fly again."]
+    : ["Brave explorer! 💪", "You finished the whole mission! Practise a little more and play again – you'll soar higher next time."];
+  sfx.win();
+  render(`
+    <div class="center">
+      <div class="kicker">Mission Report</div>
+      <h2>${msg[0]}</h2>
+      <div class="bigscore">${sc}<small> / ${TOTAL}</small></div>
+      <div class="stars">${"⭐".repeat(stars)}${"☆".repeat(3 - stars)}</div>
+      <p>${msg[1]}</p>
+      <div class="passport">${STATIONS.map((s, i) => `<div class="pstamp" style="--r:${[-4, 3, -2, 4][i]}deg"><b>${s.emoji} ${s.city}</b>${S.results[i].filter(Boolean).length} / 3</div>`).join("")}</div>
+      <button class="btn pink" id="again">Play Again 🔁</button>
+    </div>
+    <div class="confetti">${Array.from({ length: 40 }, () => `<i style="left:${Math.random() * 100}%;background:${["#F28DB2", "#2BB5B0", "#E9D3B4", "#D9567F", "#F9C66B"][Math.random() * 5 | 0]};animation-duration:${2 + Math.random() * 2.5}s;animation-delay:${Math.random() * 1.2}s"></i>`).join("")}</div>`);
+  $screen.querySelector("#again").onclick = () => { sfx.tap(); showStart(); };
+}
+
+showStart();
+</script>
+</body>
+</html>
